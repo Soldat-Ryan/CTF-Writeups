@@ -15,8 +15,8 @@ Flag format: L3AK{pass1_pass2_pass3}
 
 
 ## First password :
+References from https://www.openwall.com/john/doc/RULES.shtml
 ```
-# From https://www.openwall.com/john/doc/RULES.shtml
 ^X	    prefix the word with character X
 }	    rotate the word right: "smithj" -> "jsmith"
 DN	    delete the character in position N
@@ -50,8 +50,8 @@ hashcat -m 1400 -a 6 "2a07038481b64a934495e5a91d011ecbf278aba8c5263841e1d13f7397
 
 ## Second password : 
 
+References from https://www.openwall.com/john/doc/RULES.shtml
 ```
-# From https://www.openwall.com/john/doc/RULES.shtml
 l	    convert to lowercase
 r	    reverse: "Fred" -> "derF"
 ```
@@ -78,7 +78,7 @@ Performing the ROT1 to ROT25 transformations to the wordlist with a C script
 #ifndef QWERTY_MAP_H
 #define QWERTY_MAP_H
 
-// QWERTY right-shift table for lowercase letters, digits, and symbols
+// QWERTY right-shift table for lowercase letters and digits
 char qwerty_right(char c) {
     switch (c) {
         // Numbers
@@ -240,7 +240,7 @@ char toggle_consonant(char c) {
     return isupper(c) ? tolower(c) : toupper(c);
 }
 
-// Génère toutes les combinaisons de casses pour les voyelles dans la 2e moitié
+// All combinations for vowels (2nd half)
 void generate_variants(const char *first, const char *second, FILE *out) {
     int len = strlen(first);
     int vowel_indices[MAX_VOWELS];
@@ -249,14 +249,14 @@ void generate_variants(const char *first, const char *second, FILE *out) {
     char base[8];
     strcpy(base, second);
 
-    // Identifier les indices de voyelles dans second
+    // Vowel indice 
     for (int i = 0; i < len; i++) {
         if (is_vowel(base[i])) {
             vowel_indices[vowel_count++] = i;
         }
     }
 
-    int total = 1 << vowel_count; // 2^n combinaisons
+    int total = 1 << vowel_count; // 2^n combinations
 
     for (int mask = 0; mask < total; mask++) {
         char variant[8];
@@ -340,13 +340,7 @@ Output written to transformed_variants.txt
 
 john -w=transformed_variants.txt <(echo -n "84b9e0298b1beb5236b7fcd2dd67e67abf62d16fe6d591024178790238cb4453") --format=raw-sha256
 
-Using default input encoding: UTF-8
-Loaded 1 password hash (Raw-SHA256 [SHA256 128/128 ASIMD 4x])
-Press 'q' or Ctrl-C to abort, 'h' for help, almost any other key for status
 CcoATnTdoyNY     (?)
-1g 0:00:00:00 DONE (2025-07-12 20:20) 5.000g/s 14652Kp/s 14652Kc/s 14652KC/s CnoETlTloE..CUorSaTs
-Use the "--show --format=Raw-SHA256" options to display all of the cracked passwords reliably
-Session completed.
 ```
 
 FLAG : `L3AK{er!bLigbroth1984_o4d@lkny@d_CcoATnTdoyNY}`
